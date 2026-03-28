@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AINURIA</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #f7f3ee;
+  --cream2: #ede8e0;
+  --cream3: #e0d9cf;
+  --ink: #0f0f0f;
+  --ink2: #1e1e1e;
+  --ink3: #2c2c2c;
+  --wine: #7a1f2e;
+  --wine-light: #9b2d40;
+  --wine-pale: #f0e4e6;
+  --grey: #8a8480;
+  --grey-light: #c8c2bb;
+  --white: #ffffff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* Grain overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.4;
+}
+
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: var(--cream2); }
+::-webkit-scrollbar-thumb { background: var(--wine); }
+
+/* ── HEADER ── */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 20px 48px;
+  background: rgba(247,243,238,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cream3);
+}
+
+nav {
+  display: flex; gap: 36px; align-items: center;
+}
+nav a {
+  font-size: 11px; font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+nav a:hover { color: var(--wine); }
+
+.logo {
+  text-align: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 400;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.header-right {
+  display: flex; justify-content: flex-end; align-items: center; gap: 24px;
+}
+.cart-pill {
+  font-size: 11px; font-weight: 400;
+  letter-spacing: 0.1em;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 8px 20px;
+  border: none; cursor: pointer;
+  transition: background 0.3s;
+}
+.cart-pill:hover { background: var(--wine); }
+
+/* ── PAGE SYSTEM ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  padding-top: 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left {
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: 80px 60px 80px 80px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-eyebrow {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--wine);
+  margin-bottom: 28px;
+  opacity: 0; animation: slideIn 0.9s ease 0.2s forwards;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(52px, 6vw, 96px);
+  font-weight: 700;
+  line-height: 1.0;
+  color: var(--ink);
+  opacity: 0; animation: slideIn 0.9s ease 0.4s forwards;
+}
+.hero-title em {
+  font-style: italic; font-weight: 400;
+  color: var(--wine);
+}
+
+.hero-body {
+  margin-top: 32px;
+  font-size: 14px; line-height: 1.8;
+  color: var(--grey);
+  max-width: 380px;
+  opacity: 0; animation: slideIn 0.9s ease 0.6s forwards;
+}
+
+.hero-actions {
+  margin-top: 48px;
+  display: flex; gap: 16px; align-items: center;
+  opacity: 0; animation: slideIn 0.9s ease 0.8s forwards;
+}
+
+.btn-dark {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 15px 40px;
+  background: var(--ink);
+  color: var(--cream);
+  border: none; cursor: pointer;
+  text-decoration: none; display: inline-block;
+  transition: background 0.3s;
+}
+.btn-dark:hover { background: var(--wine); }
+
+.btn-line {
+  font-size: 11px; font-weight: 400;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink3);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--ink3);
+  padding-bottom: 2px;
+  transition: color 0.3s, border-color 0.3s;
+}
+.btn-line:hover { color: var(--wine); border-color: var(--wine); }
+
+/* Hero stats */
+.hero-stats {
+  margin-top: 64px;
+  display: flex; gap: 40px;
+  opacity: 0; animation: slideIn 0.9s ease 1s forwards;
+}
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px; font-weight: 700;
+  color: var(--ink); line-height: 1;
+}
+.stat-label {
+  font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--grey);
+  margin-top: 4px;
+}
+
+/* Hero right - visual panel */
+.hero-right {
+  position: relative;
+  background: var(--ink2);
+  overflow: hidden;
+}
+.hero-right-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 60% 40%, rgba(122,31,46,0.25) 0%, transparent 60%),
+    linear-gradient(160deg, #1e1e1e 0%, #0f0f0f 100%);
+}
+.hero-visual-text {
+  position: absolute;
+  bottom: 60px; left: 50px; right: 50px;
+  opacity: 0; animation: fadeIn 1.2s ease 1s forwards;
+}
+.hero-visual-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 80px; font-weight: 900;
+  color: rgba(247,243,238,0.06);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.hero-badge {
+  position: absolute;
+  top: 60px; right: 50px;
+  width: 110px; height: 110px;
+  border: 1px solid rgba(247,243,238,0.15);
+  border-radius: 50%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4px;
+  animation: rotateSlow 20s linear infinite;
+  opacity: 0; animation: fadeIn 1s ease 1.2s forwards, rotateSlow 20s linear 1.2s infinite;
+}
+.hero-badge span {
+  font-size: 8px; letter-spacing: 0.3em;
+  text-transform: uppercase; color: rgba(247,243,238,0.5);
+  text-align: center;
+}
+.hero-badge strong {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; color: rgba(247,243,238,0.8);
+}
+
+/* Big decorative number */
+.hero-deco-num {
+  position: absolute;
+  bottom: -20px; right: -10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 240px; font-weight: 900;
+  color: rgba(247,243,238,0.03);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Floating categories on hero-right */
+.hero-cats {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; gap: 3px;
+  width: 260px;
+  opacity: 0; animation: fadeIn 1s ease 0.8s forwards;
+}
+.hero-cat-item {
+  padding: 18px 24px;
+  background: rgba(247,243,238,0.04);
+  border: 1px solid rgba(247,243,238,0.06);
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.hero-cat-item:hover {
+  background: rgba(122,31,46,0.2);
+  border-color: rgba(122,31,46,0.4);
+}
+.hero-cat-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-style: italic;
+  color: rgba(247,243,238,0.7);
+}
+.hero-cat-arr { color: rgba(247,243,238,0.3); font-size: 14px; }
+.hero-cat-item:hover .hero-cat-name { color: rgba(247,243,238,0.95); }
+.hero-cat-item:hover .hero-cat-arr { color: var(--wine-light); }
+
+/* ── MARQUEE ── */
+.marquee-strip {
+  background: var(--ink);
+  padding: 14px 0;
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex; gap: 0;
+  animation: ticker 25s linear infinite;
+  white-space: nowrap;
+}
+.marquee-seg {
+  display: flex; align-items: center; gap: 40px;
+  padding: 0 40px; flex-shrink: 0;
+}
+.marquee-seg span {
+  font-size: 11px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(247,243,238,0.45);
+  font-weight: 300;
+}
+.marquee-seg i {
+  width: 4px; height: 4px;
+  background: var(--wine);
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+/* ── SECTION TITLE ── */
+.s-label {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--wine); margin-bottom: 14px; display: block;
+}
+.s-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 4.5vw, 64px);
+  font-weight: 700; line-height: 1.05;
+  color: var(--ink);
+}
+.s-title em { font-style: italic; font-weight: 400; color: var(--wine); }
+
+/* ── CATEGORY SHOWCASE ── */
+.cat-showcase {
+  padding: 120px 80px;
+  background: var(--white);
+}
+
+.cat-showcase-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 60px;
+}
+.see-all {
+  font-size: 11px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--grey);
+  text-decoration: none;
+  border-bottom: 1px solid var(--grey-light);
+  padding-bottom: 2px;
+  transition: color 0.3s, border-color 0.3s;
+}
+.see-all:hover { color: var(--wine); border-color: var(--wine); }
+
+/* Editorial asymmetric grid */
+.editorial-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 3px;
+}
+
+.ed-card {
+  position: relative; overflow: hidden;
+  cursor: pointer;
+}
+.ed-card:nth-child(1) { grid-row: span 2; }
+
+.ed-card-inner {
+  height: 100%;
+  min-height: 320px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 36px;
+  position: relative;
+}
+.ed-card:nth-child(1) .ed-card-inner { min-height: 640px; }
+
+.ed-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.ed-card:hover .ed-bg { transform: scale(1.04); }
+
+.ed-card:nth-child(1) .ed-bg {
+  background: linear-gradient(160deg, #f0e4e6 0%, #e8d5d9 100%);
+}
+.ed-card:nth-child(2) .ed-bg {
+  background: linear-gradient(140deg, #e8e4df 0%, #dcd6ce 100%);
+}
+.ed-card:nth-child(3) .ed-bg {
+  background: linear-gradient(160deg, #e4e8e0 0%, #d4daca 100%);
+}
+
+.ed-icon {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -60%);
+  font-size: 100px; opacity: 0.2;
+  transition: opacity 0.4s, transform 0.4s;
+}
+.ed-card:nth-child(1) .ed-icon { font-size: 130px; }
+.ed-card:hover .ed-icon { opacity: 0.32; transform: translate(-50%, -62%); }
+
+.ed-content {
+  position: relative; z-index: 2;
+}
+.ed-tag {
+  font-size: 9px; font-weight: 500;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--wine); margin-bottom: 10px;
+}
+.ed-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px; font-weight: 700;
+  color: var(--ink); line-height: 1;
+  margin-bottom: 10px;
+}
+.ed-card:nth-child(1) .ed-name { font-size: 52px; }
+.ed-sub {
+  font-size: 12px; color: var(--grey);
+  line-height: 1.6; margin-bottom: 20px;
+}
+.ed-arrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink);
+  transition: gap 0.3s;
+}
+.ed-arrow::after { content: '→'; font-size: 16px; }
+.ed-card:hover .ed-arrow { gap: 16px; }
+
+/* ── PRODUCTS SECTION ── */
+.products-section {
+  padding: 120px 80px;
+  background: var(--cream);
+}
+
+.prod-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 56px;
+}
+
+/* Horizontal scroll strip for homepage featured */
+.prod-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+}
+
+.prod-card {
+  background: var(--white);
+  position: relative; cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.prod-card:hover { transform: translateY(-4px); }
+
+.prod-img {
+  height: 260px;
+  background: var(--cream2);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.prod-img-bg {
+  position: absolute; inset: 0;
+  transition: transform 0.6s ease;
+}
+.prod-card:hover .prod-img-bg { transform: scale(1.05); }
+
+.prod-card:nth-child(1) .prod-img-bg { background: linear-gradient(135deg, #f0e4e6, #f7eeef); }
+.prod-card:nth-child(2) .prod-img-bg { background: linear-gradient(135deg, #e4e0da, #eeeae4); }
+.prod-card:nth-child(3) .prod-img-bg { background: linear-gradient(135deg, #e6eae4, #edf0eb); }
+.prod-card:nth-child(4) .prod-img-bg { background: linear-gradient(135deg, #e8e4f0, #eeebf5); }
+
+.prod-emoji {
+  font-size: 72px; opacity: 0.3; position: relative; z-index: 1;
+  transition: opacity 0.4s, transform 0.4s;
+}
+.prod-card:hover .prod-emoji { opacity: 0.45; transform: scale(1.05); }
+
+.prod-label {
+  position: absolute; top: 16px; left: 16px;
+  font-size: 8px; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 4px 10px;
+  background: var(--wine);
+  color: var(--white);
+}
+
+.prod-body { padding: 20px; }
+.prod-brand {
+  font-size: 9px; font-weight: 500;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--wine); margin-bottom: 6px;
+}
+.prod-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px; font-weight: 700;
+  color: var(--ink); margin-bottom: 4px; line-height: 1.2;
+}
+.prod-sub {
+  font-size: 11px; color: var(--grey-light);
+  margin-bottom: 18px;
+}
+.prod-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--cream2);
+}
+.prod-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--ink);
+}
+.prod-price sup { font-size: 12px; font-weight: 400; vertical-align: super; }
+.prod-btn {
+  font-size: 9px; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 9px 16px;
+  background: none;
+  border: 1px solid var(--ink3);
+  color: var(--ink3);
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.prod-btn:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+/* ── FULL-WIDTH BANNER ── */
+.full-banner {
+  min-height: 480px;
+  background: var(--ink);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  position: relative;
+}
+.fb-left {
+  padding: 90px 80px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.fb-label {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--wine-light); margin-bottom: 20px;
+}
+.fb-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 52px; font-weight: 700;
+  color: var(--cream); line-height: 1.05;
+  margin-bottom: 20px;
+}
+.fb-title em { font-style: italic; color: rgba(247,243,238,0.5); font-weight: 400; }
+.fb-body {
+  font-size: 13px; color: rgba(247,243,238,0.45);
+  line-height: 1.9; max-width: 380px; margin-bottom: 40px;
+}
+.btn-wine {
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 15px 40px;
+  background: var(--wine);
+  color: var(--white);
+  border: none; cursor: pointer;
+  display: inline-block; text-decoration: none;
+  transition: background 0.3s;
+  align-self: flex-start;
+}
+.btn-wine:hover { background: var(--wine-light); }
+
+.fb-right {
+  position: relative; overflow: hidden;
+  background: linear-gradient(160deg, #1a0a0d 0%, #0f0f0f 100%);
+}
+.fb-right-deco {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.fb-circle {
+  width: 340px; height: 340px;
+  border: 1px solid rgba(122,31,46,0.2);
+  border-radius: 50%;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.fb-circle::before {
+  content: '';
+  position: absolute; inset: 40px;
+  border: 1px solid rgba(122,31,46,0.12);
+  border-radius: 50%;
+}
+.fb-circle-emoji { font-size: 90px; opacity: 0.12; }
+.fb-numbers {
+  position: absolute; bottom: 40px; left: 40px; right: 40px;
+  display: flex; gap: 30px;
+}
+.fb-stat { flex: 1; }
+.fb-stat-n {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px; font-weight: 700;
+  color: rgba(247,243,238,0.7); line-height: 1;
+}
+.fb-stat-l {
+  font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(247,243,238,0.25);
+  margin-top: 4px;
+}
+
+/* ── NEWSLETTER ── */
+.newsletter {
+  padding: 100px 80px;
+  background: var(--wine-pale);
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+}
+.nl-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px; font-weight: 700;
+  color: var(--ink); line-height: 1.1;
+  margin-bottom: 16px;
+}
+.nl-title em { font-style: italic; font-weight: 400; color: var(--wine); }
+.nl-sub {
+  font-size: 13px; color: var(--grey);
+  line-height: 1.8;
+}
+.nl-form { display: flex; flex-direction: column; gap: 12px; }
+.nl-input {
+  padding: 16px 24px;
+  background: var(--white);
+  border: 1px solid var(--cream3);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; outline: none;
+  transition: border-color 0.3s;
+}
+.nl-input::placeholder { color: var(--grey-light); }
+.nl-input:focus { border-color: var(--wine); }
+.nl-submit {
+  padding: 16px 24px;
+  background: var(--wine);
+  color: var(--white);
+  border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  transition: background 0.3s;
+  align-self: flex-start;
+  min-width: 180px;
+}
+.nl-submit:hover { background: var(--wine-light); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  padding: 80px 80px 40px;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid rgba(247,243,238,0.08);
+  margin-bottom: 40px;
+}
+.f-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px; letter-spacing: 0.3em;
+  color: var(--cream); margin-bottom: 16px;
+}
+.f-desc {
+  font-size: 12px; line-height: 1.8;
+  color: rgba(247,243,238,0.3); max-width: 260px;
+}
+.f-col h5 {
+  font-size: 9px; font-weight: 500;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--wine-light); margin-bottom: 20px;
+}
+.f-col a {
+  display: block; font-size: 12px;
+  color: rgba(247,243,238,0.4);
+  text-decoration: none; margin-bottom: 10px;
+  transition: color 0.25s;
+}
+.f-col a:hover { color: var(--cream); }
+.footer-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.f-copy { font-size: 11px; color: rgba(247,243,238,0.2); letter-spacing: 0.08em; }
+.f-socials { display: flex; gap: 24px; }
+.f-socials a {
+  font-size: 11px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: rgba(247,243,238,0.3);
+  text-decoration: none; transition: color 0.3s;
+}
+.f-socials a:hover { color: var(--wine-light); }
+
+/* ── CATEGORY PAGE ── */
+.cat-hero {
+  padding: 140px 80px 80px;
+  background: var(--white);
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--cream2);
+}
+.cat-hero-meta { }
+.back-btn {
+  font-size: 11px; font-weight: 400;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--grey);
+  background: none; border: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-bottom: 24px; padding: 0;
+  transition: color 0.3s;
+}
+.back-btn:hover { color: var(--wine); }
+.back-btn::before { content: '←'; font-size: 16px; }
+
+.cat-hero-count {
+  font-family: 'Playfair Display', serif;
+  font-size: 120px; font-weight: 900;
+  color: var(--cream2); line-height: 1;
+  user-select: none;
+}
+
+/* Category products grid */
+.cat-products {
+  padding: 60px 80px 100px;
+  background: var(--cream);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+.cat-products .prod-img { height: 320px; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 32px; left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--ink);
+  color: var(--cream);
+  padding: 14px 32px;
+  font-size: 12px; letter-spacing: 0.08em;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 9000; pointer-events: none;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+.toast b { color: var(--wine-light); }
+
+/* ── ANIMATIONS ── */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.reveal {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+.reveal.on { opacity: 1; transform: translateY(0); }
+.d1 { transition-delay: 0.1s; }
+.d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; }
+.d4 { transition-delay: 0.4s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+  header { grid-template-columns: 1fr auto; padding: 18px 24px; }
+  nav { display: none; }
+  .header-right { display: none; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-left { padding: 40px 24px 60px; }
+  .cat-showcase { padding: 80px 24px; }
+  .editorial-grid { grid-template-columns: 1fr; }
+  .ed-card:nth-child(1) { grid-row: span 1; }
+  .products-section { padding: 80px 24px; }
+  .prod-strip { grid-template-columns: repeat(2, 1fr); }
+  .full-banner { grid-template-columns: 1fr; }
+  .fb-right { display: none; }
+  .newsletter { padding: 80px 24px; grid-template-columns: 1fr; gap: 40px; }
+  footer { padding: 60px 24px 30px; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .cat-hero { padding: 120px 24px 60px; grid-template-columns: 1fr; }
+  .cat-hero-count { display: none; }
+  .cat-products { padding: 40px 24px 80px; grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast">Добавлено: <b id="toastName"></b></div>
+
+<!-- HEADER -->
+<header>
+  <nav>
+    <a href="#" onclick="go('home')">Главная</a>
+    <a href="#" onclick="go('perfume')">Парфюмы</a>
+    <a href="#" onclick="go('watches')">Часы</a>
+    <a href="#" onclick="go('beauty')">Косметика</a>
+  </nav>
+  <a class="logo" href="#" onclick="go('home')">AINURIA</a>
+  <div class="header-right">
+    <button class="cart-pill" id="cartBtn">Корзина · 0</button>
+  </div>
+</header>
+
+<!-- ══════ HOME ══════ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Люксовый каталог · Сезон 2024</div>
+      <h1 class="hero-title">Искусство<br>выбирать<br><em>лучшее</em></h1>
+      <p class="hero-body">Парфюмерия, часы и уходовая косметика — тщательно отобранные для тех, кто не идёт на компромисс с качеством.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-dark" onclick="document.querySelector('.cat-showcase').scrollIntoView({behavior:'smooth'})">Смотреть каталог</a>
+        <a href="#" class="btn-line">Наша история</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">320+</div>
+          <div class="stat-label">Позиций</div>
+        </div>
+        <div>
+          <div class="stat-num">48</div>
+          <div class="stat-label">Брендов</div>
+        </div>
+        <div>
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Оригинал</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-right-bg"></div>
+      <div class="hero-badge">
+        <strong>A</strong>
+        <span>AINURIA</span>
+      </div>
+      <div class="hero-cats">
+        <div class="hero-cat-item" onclick="go('perfume')">
+          <span class="hero-cat-name">Парфюмы</span>
+          <span class="hero-cat-arr">→</span>
+        </div>
+        <div class="hero-cat-item" onclick="go('watches')">
+          <span class="hero-cat-name">Часы</span>
+          <span class="hero-cat-arr">→</span>
+        </div>
+        <div class="hero-cat-item" onclick="go('beauty')">
+          <span class="hero-cat-name">Косметика</span>
+          <span class="hero-cat-arr">→</span>
+        </div>
+      </div>
+      <div class="hero-visual-text">
+        <div class="hero-visual-title">AINURIA</div>
+      </div>
+      <div class="hero-deco-num">A</div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-strip">
+    <div class="marquee-track">
+      <div class="marquee-seg"><span>Парфюмерия</span><i></i><span>Швейцарские часы</span><i></i><span>Уходовая косметика</span><i></i><span>Ainuria</span><i></i><span>Luxury Selection</span><i></i></div>
+      <div class="marquee-seg"><span>Парфюмерия</span><i></i><span>Швейцарские часы</span><i></i><span>Уходовая косметика</span><i></i><span>Ainuria</span><i></i><span>Luxury Selection</span><i></i></div>
+      <div class="marquee-seg"><span>Парфюмерия</span><i></i><span>Швейцарские часы</span><i></i><span>Уходовая косметика</span><i></i><span>Ainuria</span><i></i><span>Luxury Selection</span><i></i></div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="cat-showcase">
+    <div class="cat-showcase-header reveal">
+      <div>
+        <span class="s-label">Каталог</span>
+        <h2 class="s-title">Три <em>мира</em><br>совершенства</h2>
+      </div>
+      <a href="#" class="see-all">Все разделы</a>
+    </div>
+    <div class="editorial-grid">
+      <div class="ed-card reveal" onclick="go('perfume')">
+        <div class="ed-card-inner">
+          <div class="ed-bg"></div>
+          <div class="ed-icon">🌸</div>
+          <div class="ed-content">
+            <div class="ed-tag">Раздел 01</div>
+            <div class="ed-name">Парфюмерия</div>
+            <div class="ed-sub">Нишевые и люксовые ароматы от лучших домов мира — от Maison Francis до Clive Christian</div>
+            <div class="ed-arrow">Смотреть</div>
+          </div>
+        </div>
+      </div>
+      <div class="ed-card reveal d1" onclick="go('watches')">
+        <div class="ed-card-inner">
+          <div class="ed-bg"></div>
+          <div class="ed-icon">⌚</div>
+          <div class="ed-content">
+            <div class="ed-tag">Раздел 02</div>
+            <div class="ed-name">Часы</div>
+            <div class="ed-sub">Швейцарское мастерство — Rolex, Patek Philippe, Audemars Piguet</div>
+            <div class="ed-arrow">Смотреть</div>
+          </div>
+        </div>
+      </div>
+      <div class="ed-card reveal d2" onclick="go('beauty')">
+        <div class="ed-card-inner">
+          <div class="ed-bg"></div>
+          <div class="ed-icon">✨</div>
+          <div class="ed-content">
+            <div class="ed-tag">Раздел 03</div>
+            <div class="ed-name">Косметика</div>
+            <div class="ed-sub">La Mer, Sisley, La Prairie — уход с редкими ингредиентами премиальных формул</div>
+            <div class="ed-arrow">Смотреть</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PRODUCTS -->
+  <section class="products-section">
+    <div class="prod-header reveal">
+      <div>
+        <span class="s-label">Избранное</span>
+        <h2 class="s-title">Хиты <em>сезона</em></h2>
+      </div>
+      <a href="#" class="see-all">Смотреть все</a>
+    </div>
+    <div class="prod-strip">
+      <div class="prod-card reveal">
+        <div class="prod-img">
+          <div class="prod-img-bg"></div>
+          <div class="prod-emoji">🌸</div>
+          <div class="prod-label">NEW</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-brand">Maison Francis</div>
+          <div class="prod-name">Rose Infernale</div>
+          <div class="prod-sub">EDP · 70 мл</div>
+          <div class="prod-foot">
+            <div class="prod-price"><sup>₸</sup>89 000</div>
+            <button class="prod-btn" onclick="addCart('Rose Infernale')">В корзину</button>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card reveal d1">
+        <div class="prod-img">
+          <div class="prod-img-bg"></div>
+          <div class="prod-emoji">⌚</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-brand">Patek Philippe</div>
+          <div class="prod-name">Calatrava</div>
+          <div class="prod-sub">Ref. 5227G · Белое золото</div>
+          <div class="prod-foot">
+            <div class="prod-price"><sup>₸</sup>4 200 000</div>
+            <button class="prod-btn" onclick="addCart('Calatrava')">В корзину</button>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card reveal d2">
+        <div class="prod-img">
+          <div class="prod-img-bg"></div>
+          <div class="prod-emoji">✨</div>
+          <div class="prod-label">HIT</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-brand">La Mer</div>
+          <div class="prod-name">Crème de la Mer</div>
+          <div class="prod-sub">Крем · 60 мл</div>
+          <div class="prod-foot">
+            <div class="prod-price"><sup>₸</sup>145 000</div>
+            <button class="prod-btn" onclick="addCart('Crème de la Mer')">В корзину</button>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card reveal d3">
+        <div class="prod-img">
+          <div class="prod-img-bg"></div>
+          <div class="prod-emoji">🌿</div>
+        </div>
+        <div class="prod-body">
+          <div class="prod-brand">Tom Ford</div>
+          <div class="prod-name">Oud Wood</div>
+          <div class="prod-sub">EDP · 100 мл</div>
+          <div class="prod-foot">
+            <div class="prod-price"><sup>₸</sup>125 000</div>
+            <button class="prod-btn" onclick="addCart('Oud Wood')">В корзину</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANNER -->
+  <div class="full-banner">
+    <div class="fb-left reveal">
+      <div class="fb-label">Наша философия</div>
+      <h2 class="fb-title">Только<br>подлинное,<br>только <em>лучшее</em></h2>
+      <p class="fb-body">Каждый товар проходит строгую проверку подлинности. Мы работаем напрямую с официальными дистрибьюторами и домами моды.</p>
+      <a href="#" class="btn-wine">Узнать больше</a>
+    </div>
+    <div class="fb-right">
+      <div class="fb-right-deco">
+        <div class="fb-circle">
+          <div class="fb-circle-emoji">◆</div>
+        </div>
+      </div>
+      <div class="fb-numbers">
+        <div class="fb-stat"><div class="fb-stat-n">7+</div><div class="fb-stat-l">Лет на рынке</div></div>
+        <div class="fb-stat"><div class="fb-stat-n">12K</div><div class="fb-stat-l">Клиентов</div></div>
+        <div class="fb-stat"><div class="fb-stat-n">48</div><div class="fb-stat-l">Брендов</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter">
+    <div class="reveal">
+      <h2 class="nl-title">Будьте<br>в числе <em>первых</em></h2>
+      <p class="nl-sub">Подпишитесь и получайте информацию о новых поступлениях и закрытых распродажах раньше всех.</p>
+    </div>
+    <div class="nl-form reveal d1">
+      <input class="nl-input" type="text" placeholder="Ваше имя">
+      <input class="nl-input" type="email" placeholder="Email адрес">
+      <button class="nl-submit">Подписаться</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <div class="f-logo">AINURIA</div>
+        <p class="f-desc">Премиальный каталог парфюмерии, часов и уходовой косметики. Для тех, кто ценит совершенство.</p>
+      </div>
+      <div class="f-col">
+        <h5>Каталог</h5>
+        <a href="#" onclick="go('perfume')">Парфюмы</a>
+        <a href="#" onclick="go('watches')">Часы</a>
+        <a href="#" onclick="go('beauty')">Косметика</a>
+        <a href="#">Новинки</a>
+      </div>
+      <div class="f-col">
+        <h5>Компания</h5>
+        <a href="#">О нас</a>
+        <a href="#">Доставка</a>
+        <a href="#">Гарантия</a>
+        <a href="#">Контакты</a>
+      </div>
+      <div class="f-col">
+        <h5>Поддержка</h5>
+        <a href="#">Возврат</a>
+        <a href="#">Оплата</a>
+        <a href="#">FAQ</a>
+        <a href="#">Политика</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="f-copy">© 2024 AINURIA. Все права защищены.</span>
+      <div class="f-socials">
+        <a href="#">Instagram</a>
+        <a href="#">Telegram</a>
+        <a href="#">WhatsApp</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ══════ PERFUME PAGE ══════ -->
+<div class="page" id="page-perfume">
+  <div class="cat-hero">
+    <div class="cat-hero-meta">
+      <button class="back-btn" onclick="go('home')">Вернуться</button>
+      <span class="s-label">Раздел 01</span>
+      <h1 class="s-title">Парфюмерия</h1>
+    </div>
+    <div class="cat-hero-count">01</div>
+  </div>
+  <div class="cat-products">
+    <div class="prod-card"><div class="prod-img" style="background:#f0e4e6"><div class="prod-emoji" style="opacity:.25">🌸</div><div class="prod-label">NEW</div></div><div class="prod-body"><div class="prod-brand">Maison Francis</div><div class="prod-name">Rose Infernale</div><div class="prod-sub">EDP · 70 мл</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>89 000</div><button class="prod-btn" onclick="addCart('Rose Infernale')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#eee8e0"><div class="prod-emoji" style="opacity:.25">🌿</div></div><div class="prod-body"><div class="prod-brand">Tom Ford</div><div class="prod-name">Oud Wood</div><div class="prod-sub">EDP · 100 мл</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>125 000</div><button class="prod-btn" onclick="addCart('Oud Wood')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#ede8f0"><div class="prod-emoji" style="opacity:.25">🌷</div><div class="prod-label">HIT</div></div><div class="prod-body"><div class="prod-brand">Chanel</div><div class="prod-name">N°5</div><div class="prod-sub">EDP · 100 мл</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>112 000</div><button class="prod-btn" onclick="addCart('Chanel N°5')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#e8f0e4"><div class="prod-emoji" style="opacity:.25">🍋</div></div><div class="prod-body"><div class="prod-brand">Acqua di Parma</div><div class="prod-name">Colonia</div><div class="prod-sub">EDC · 180 мл</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>78 000</div><button class="prod-btn" onclick="addCart('Colonia')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#f0ece4"><div class="prod-emoji" style="opacity:.25">🌙</div></div><div class="prod-body"><div class="prod-brand">Clive Christian</div><div class="prod-name">No. 1</div><div class="prod-sub">Perfume · 50 мл</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>380 000</div><button class="prod-btn" onclick="addCart('Clive Christian No.1')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#f0e8e4"><div class="prod-emoji" style="opacity:.25">🌺</div></div><div class="prod-body"><div class="prod-brand">Dior</div><div class="prod-name">Miss Dior</div><div class="prod-sub">EDP · 100 мл</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>96 000</div><button class="prod-btn" onclick="addCart('Miss Dior')">В корзину</button></div></div></div>
+  </div>
+  <footer>
+    <div class="footer-bottom" style="border-top:1px solid rgba(247,243,238,0.08);padding-top:30px">
+      <span class="f-copy">© 2024 AINURIA</span>
+      <div class="f-socials"><a href="#">Instagram</a><a href="#">Telegram</a></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════ WATCHES PAGE ══════ -->
+<div class="page" id="page-watches">
+  <div class="cat-hero">
+    <div class="cat-hero-meta">
+      <button class="back-btn" onclick="go('home')">Вернуться</button>
+      <span class="s-label">Раздел 02</span>
+      <h1 class="s-title">Часы</h1>
+    </div>
+    <div class="cat-hero-count">02</div>
+  </div>
+  <div class="cat-products">
+    <div class="prod-card"><div class="prod-img" style="background:#e4e8ee"><div class="prod-emoji" style="opacity:.25">⌚</div><div class="prod-label">NEW</div></div><div class="prod-body"><div class="prod-brand">Patek Philippe</div><div class="prod-name">Calatrava</div><div class="prod-sub">Ref. 5227G · Белое золото</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>4 200 000</div><button class="prod-btn" onclick="addCart('Calatrava')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#e8e4e0"><div class="prod-emoji" style="opacity:.25">🕰️</div></div><div class="prod-body"><div class="prod-brand">Rolex</div><div class="prod-name">Datejust 41</div><div class="prod-sub">Oyster · Jubilee</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>3 800 000</div><button class="prod-btn" onclick="addCart('Rolex Datejust')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#eae8e0"><div class="prod-emoji" style="opacity:.25">⏱️</div><div class="prod-label">HIT</div></div><div class="prod-body"><div class="prod-brand">Audemars Piguet</div><div class="prod-name">Royal Oak</div><div class="prod-sub">Self-winding · 41мм</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>8 500 000</div><button class="prod-btn" onclick="addCart('Royal Oak')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#e8eaee"><div class="prod-emoji" style="opacity:.25">🪙</div></div><div class="prod-body"><div class="prod-brand">Cartier</div><div class="prod-name">Santos</div><div class="prod-sub">Сталь · 39.8мм</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>1 900 000</div><button class="prod-btn" onclick="addCart('Santos Cartier')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#e4eae8"><div class="prod-emoji" style="opacity:.25">💎</div></div><div class="prod-body"><div class="prod-brand">IWC</div><div class="prod-name">Portugieser</div><div class="prod-sub">Хронограф · 41мм</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>2 400 000</div><button class="prod-btn" onclick="addCart('IWC Portugieser')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#ece8e4"><div class="prod-emoji" style="opacity:.25">🌟</div></div><div class="prod-body"><div class="prod-brand">Jaeger-LeCoultre</div><div class="prod-name">Reverso</div><div class="prod-sub">Classic Large Thin</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>3 100 000</div><button class="prod-btn" onclick="addCart('Jaeger Reverso')">В корзину</button></div></div></div>
+  </div>
+  <footer>
+    <div class="footer-bottom" style="border-top:1px solid rgba(247,243,238,0.08);padding-top:30px">
+      <span class="f-copy">© 2024 AINURIA</span>
+      <div class="f-socials"><a href="#">Instagram</a><a href="#">Telegram</a></div>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════ BEAUTY PAGE ══════ -->
+<div class="page" id="page-beauty">
+  <div class="cat-hero">
+    <div class="cat-hero-meta">
+      <button class="back-btn" onclick="go('home')">Вернуться</button>
+      <span class="s-label">Раздел 03</span>
+      <h1 class="s-title">Косметика</h1>
+    </div>
+    <div class="cat-hero-count">03</div>
+  </div>
+  <div class="cat-products">
+    <div class="prod-card"><div class="prod-img" style="background:#eef0ea"><div class="prod-emoji" style="opacity:.25">✨</div><div class="prod-label">HIT</div></div><div class="prod-body"><div class="prod-brand">La Mer</div><div class="prod-name">Crème de la Mer</div><div class="prod-sub">Крем · 60 мл</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>145 000</div><button class="prod-btn" onclick="addCart('Crème de la Mer')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#e8eef4"><div class="prod-emoji" style="opacity:.25">💧</div></div><div class="prod-body"><div class="prod-brand">SK-II</div><div class="prod-name">Facial Treatment</div><div class="prod-sub">Эссенция · 230 мл</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>89 000</div><button class="prod-btn" onclick="addCart('SK-II Essence')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#f0eae8"><div class="prod-emoji" style="opacity:.25">🌹</div><div class="prod-label">NEW</div></div><div class="prod-body"><div class="prod-brand">Sisley</div><div class="prod-name">Black Rose Mask</div><div class="prod-sub">Маска · 60 мл</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>67 000</div><button class="prod-btn" onclick="addCart('Sisley Rose')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#eef4ee"><div class="prod-emoji" style="opacity:.25">🌿</div></div><div class="prod-body"><div class="prod-brand">Augustinus Bader</div><div class="prod-name">The Rich Cream</div><div class="prod-sub">Крем · 50 мл</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>198 000</div><button class="prod-btn" onclick="addCart('Augustinus Bader')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#f4f0e8"><div class="prod-emoji" style="opacity:.25">☀️</div></div><div class="prod-body"><div class="prod-brand">Sulwhasoo</div><div class="prod-name">Timetreasure</div><div class="prod-sub">Сыворотка · 30 мл</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>112 000</div><button class="prod-btn" onclick="addCart('Sulwhasoo')">В корзину</button></div></div></div>
+    <div class="prod-card"><div class="prod-img" style="background:#eeeaf4"><div class="prod-emoji" style="opacity:.25">🫧</div></div><div class="prod-body"><div class="prod-brand">La Prairie</div><div class="prod-name">Platinum Rare</div><div class="prod-sub">Крем · 30 мл</div><div class="prod-foot"><div class="prod-price"><sup>₸</sup>340 000</div><button class="prod-btn" onclick="addCart('La Prairie')">В корзину</button></div></div></div>
+  </div>
+  <footer>
+    <div class="footer-bottom" style="border-top:1px solid rgba(247,243,238,0.08);padding-top:30px">
+      <span class="f-copy">© 2024 AINURIA</span>
+      <div class="f-socials"><a href="#">Instagram</a><a href="#">Telegram</a></div>
+    </div>
+  </footer>
+</div>
+
+<script>
+// Navigation
+function go(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(initReveal, 100);
+}
+
+// Cart
+let cart = 0;
+function addCart(name) {
+  cart++;
+  document.getElementById('cartBtn').textContent = `Корзина · ${cart}`;
+  const t = document.getElementById('toast');
+  document.getElementById('toastName').textContent = name;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// Scroll reveal
+function initReveal() {
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
+  }, { threshold: 0.08 });
+  els.forEach(el => { el.classList.remove('on'); io.observe(el); });
+}
+initReveal();
+</script>
+</body>
+</html>
